@@ -457,10 +457,18 @@
           };
           // actually make the changes request
           function getChangesSince() {
-            var opts = $.extend({heartbeat : 10 * 1000}, options, {
-              feed : "longpoll",
-              since : since
-            });
+            var opts;
+            if (!options.timeout) {
+              opts = $.extend({heartbeat : 10 * 1000}, options, {
+                feed : "longpoll",
+                since : since
+              });
+            } else {
+              opts = $.extend(options, {
+                feed : "longpoll",
+                since : since
+              });
+            }
             ajax(
               {url: db.uri + "_changes"+encodeOptions(opts)},
               options,
